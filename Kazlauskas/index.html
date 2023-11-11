@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Подключение сброса стилей -->
+    <link rel="stylesheet" href="reset.css" />
+
+    <!-- Подключение файла стилей -->
+    <link rel="stylesheet" href="style.css" />
+    <title>Форма обратной связи</title>
+    <script>
+      function generateCaptcha() {
+        var num1 = Math.floor(Math.random() * 10); // Генерация первого числа от 0 до 9
+        var num2 = Math.floor(Math.random() * 10); // Генерация второго числа от 0 до 9
+        var operator = Math.random() < 0.5 ? "+" : "-"; // Случайный выбор оператора (+ или -)
+
+        // Формирование примера
+        var captcha = num1 + " " + operator + " " + num2;
+
+        // Возвращаем результат вычисления примера
+        return {
+          captcha: captcha,
+          answer: operator === "+" ? num1 + num2 : num1 - num2,
+        };
+      }
+
+      function validateForm() {
+        var name = document.forms["feedbackForm"]["name"].value;
+        var email = document.forms["feedbackForm"]["email"].value;
+        var phone = document.forms["feedbackForm"]["phone"].value;
+        var message = document.forms["feedbackForm"]["message"].value;
+        var captchaAnswer = document.forms["feedbackForm"]["captchaAnswer"].value;
+
+        if (name == "" || email == "" || phone == "" || message == "") {
+          document.getElementById("error-message").innerHTML =
+            "Пожалуйста, заполните все обязательные поля!";
+          return false;
+        }
+
+        // Получаем правильный ответ на капчу
+        var correctAnswer = generateCaptcha().answer;
+
+        // Проверка правильности ответа на капчу
+        if (parseInt(captchaAnswer) !== correctAnswer) {
+  document.getElementById("captcha-error").innerHTML = "";
+} else {
+  document.getElementById("captcha-error").innerHTML = "";
+  showMessage("Сообщение успешно отправлено!");
+  return false; 
+}
+
+
+        // Все условия выполнены, выведите сообщение об успешной отправке формы
+        showMessage("Сообщение успешно отправлено!");
+        return false; 
+      }
+
+      function showMessage(message) {
+        alert(message);
+      }
+
+      function updateCaptcha() {
+        var captcha = generateCaptcha();
+        document.getElementById("captcha").innerText = captcha.captcha;
+        document.forms["feedbackForm"]["captchaAnswer"].value = ""; // Очищаем поле ввода ответа
+        document.getElementById("captcha-error").innerText = ""; // Очищаем сообщение об ошибке капчи
+      }
+    </script>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">Казлаускас 118</a>
+    </nav>
+  </head>
+  <body>
+    <!-- Контейнер выравнивает по ширине и по центру -->
+    <div class="container">
+      <!-- content содержит содержимое формы -->
+      <div class="content">
+        <!-- Левая колонка: адрес, телефоны, email. Можете добавить свое -->
+        <div class="left-side">
+          <!-- Вместо классов: название шрифтовых иконок (fontawesome.com) -->
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="topic">Адрес</div>
+          <div class="text-one">г. Сургут</div>
+          <div class="text-two">Пушкина 10</div>
+
+          <i class="fas fa-phone-alt"></i>
+          <div class="topic">Телефон</div>
+          <div class="text-one">8-800-000-00-00</div>
+          <div class="text-two">8-900-000-00-00</div>
+
+          <i class="fas fa-envelope"></i>
+          <div class="topic">Email</div>
+          <div class="text-one">support@site.com</div>
+          <div class="text-two">admin@site.com</div>
+        </div>
+
+        <!-- Правая колонка: сама форма -->
+        <div class="right-side">
+          <div class="topic-text">Связаться с нами</div>
+          <p>
+            Если у вас есть какие-то вопросы, предложения по сотрудничеству или
+            вам просто необходимо связаться с нами, просто напишите нам!
+            Заполните форму ниже и мы ответим вам в ближайшее время.
+          </p>
+
+          <form name="feedbackForm" action="#" onsubmit="return validateForm()">
+            <div class="input-box">
+              <input type="text" name="name" placeholder="*Ваше имя..." />
+            </div>
+            <div class="input-box">
+              <input type="email" name="email" placeholder="*Введите email..." />
+            </div>
+            <div class="input-box">
+              <input type="text" name="phone" placeholder="*Введите телефон..." />
+            </div>
+            <div class="input-box">
+              <input type="text" name="subject" placeholder="Тема сообщения..." />
+            </div>
+            <div class="input-box message-box">
+              <textarea name="message" placeholder="*Сообщение..."></textarea>
+            </div>
+            <div class="input-box">
+              <label for="captcha">Решите пример:</label>
+              <span id="captcha"></span>
+              <button type="button" onclick="updateCaptcha()">Обновить</button>
+              <input type="text" name="captchaAnswer" placeholder="Введите ответ..." />
+            </div>
+            <div class="error" id="error-message"></div>
+            <div class="error" id="captcha-error"></div>
+            <div class="button">
+              <input type="submit" value="Отправить письмо" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://kit.fontawesome.com/fce9a50d02.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
